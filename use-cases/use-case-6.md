@@ -4,11 +4,7 @@
 
 ### Goal in Context
 
-As an *HR advisor*
-
-I want *to view an employee's details*
-
-so that *the employee's promotion request can be supported.*
+As an *HR advisor* I want *to view an employee's details* so that *the employee's promotion request can be supported.*
 
 ### Scope
 

@@ -1,4 +1,4 @@
-# USE CASE: 6 Produce (b)
+# USE CASE: 6 Produce a Report on an Employee of a Given Employee Number
 
 ## CHARACTERISTIC INFORMATION
 

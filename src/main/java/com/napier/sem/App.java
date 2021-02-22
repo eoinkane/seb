@@ -14,9 +14,9 @@ public class App
         a.connect();
 
         // Extract employee salary information
-        ArrayList<Employee> employees = a.getAllSalaries();
+        ArrayList<Employee> employees = a.getSalariesByRole("Senior Engineer");
 
-        // Test the size of the returned data - should be 240124
+        // Test the size of the returned data - should be 85939
         System.out.println(employees.size());
 
         // Disconnect from database

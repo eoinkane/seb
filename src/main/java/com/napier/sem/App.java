@@ -14,10 +14,11 @@ public class App
         a.connect();
 
         // Extract employee salary information
-        ArrayList<Employee> employees = a.getSalariesByRole("Senior Engineer");
+        Department sales_dept = a.getDepartment("sales");
+        ArrayList<Employee> employees = a.getSalariesByDepartment(sales_dept);
 
-        // Test the size of the returned data - should be 85939
-        System.out.println(employees.size());
+        // Display all the salaries
+        a.printSalaries(employees);
 
         // Disconnect from database
         a.disconnect();

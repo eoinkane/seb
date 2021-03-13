@@ -17,8 +17,8 @@ public class App
         Department sales_dept = a.getDepartment("sales");
         ArrayList<Employee> employees = a.getSalariesByDepartment(sales_dept);
 
-        // Display all the salaries
-        a.printSalaries(employees);
+        // Test the size of the returned data - should be 42000
+        System.out.println(employees.size());
 
         // Disconnect from database
         a.disconnect();
@@ -54,7 +54,7 @@ public class App
                 // Wait a bit for db to start
                 Thread.sleep(30000);
                 // Connect to database
-                con = DriverManager.getConnection("jdbc:mysql://db:3306/employees?useSSL=false", "root", "example");
+                con = DriverManager.getConnection("jdbc:mysql://localhost:3306/employees?useSSL=false", "root", "example");
                 System.out.println("Successfully connected");
                 break;
             }

@@ -14,9 +14,10 @@ public class App
         a.connect();
 
         // Extract employee salary information
-        ArrayList<Employee> employees = a.getSalariesByRole("Senior Engineer");
+        Department sales_dept = a.getDepartment("sales");
+        ArrayList<Employee> employees = a.getSalariesByDepartment(sales_dept);
 
-        // Test the size of the returned data - should be 85939
+        // Test the size of the returned data - should be 42000
         System.out.println(employees.size());
 
         // Disconnect from database
@@ -53,7 +54,7 @@ public class App
                 // Wait a bit for db to start
                 Thread.sleep(30000);
                 // Connect to database
-                con = DriverManager.getConnection("jdbc:mysql://db:3306/employees?useSSL=false", "root", "example");
+                con = DriverManager.getConnection("jdbc:mysql://localhost:3306/employees?useSSL=false", "root", "example");
                 System.out.println("Successfully connected");
                 break;
             }
@@ -288,6 +289,41 @@ public class App
         } catch (Exception e) {
             System.out.println(e.getMessage());
             System.out.println("Failed to get department");
+            return null;
+        }
+    }
+
+    public ArrayList<Employee> getSalariesByDepartment(Department dept) {
+        try {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "SELECT employees.emp_no, employees.first_name, employees.last_name, salaries.salary "
+                    + "FROM employees, salaries, dept_emp, departments "
+                    + "WHERE employees.emp_no = salaries.emp_no "
+                    + "AND employees.emp_no = dept_emp.emp_no "
+                    + "AND dept_emp.dept_no = departments.dept_no "
+                    + "AND salaries.to_date = '9999-01-01' "
+                    + "AND departments.dept_no = '" + dept.dept_no + "' "
+                    + "ORDER BY employees.emp_no ASC ";
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+
+            // Extract employee information
+            ArrayList<Employee> employees = new ArrayList<>();
+            while (rset.next()) {
+                Employee emp = new Employee();
+                emp.emp_no = rset.getInt("employees.emp_no");
+                emp.first_name = rset.getString("employees.first_name");
+                emp.last_name = rset.getString("employees.last_name");
+                emp.salary = rset.getInt("salaries.salary");
+                employees.add(emp);
+            }
+            return employees;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get salaries by role");
             return null;
         }
     }

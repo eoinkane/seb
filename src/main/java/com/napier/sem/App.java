@@ -24,7 +24,8 @@ public class App
         ArrayList<Employee> employees = a.getSalariesByDepartment(dept);
 
         // Print salary report
-        a.printSalaries(employees);
+        // a.printSalaries(employees);
+        System.out.println(employees.size()); // CI/CD implementation. Should be 42000
 
         // Disconnect from database
         a.disconnect();

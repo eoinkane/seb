@@ -1,6 +1,6 @@
 language: java
 
-sudo: required
+sudo: false
 
 addons:
   hosts:
@@ -11,11 +11,28 @@ services:
 
 install:
   - docker build -t database db/.
-  - docker run --rm -d e-e MYSQL_ROOT_PASSWORD=example -p 33060:3306 database
+  - docker run --rm -d -e MYSQL_ROOT_PASSWORD=example -p 33060:3306 database
   - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 
 before_script:
   - mvn clean
 
-script:
-  - mvn test -D test=com.napier.sem.AppTest
+jobs:
+  include:
+    - stage: unit tests
+      install: skip
+      jdk: oraclejdk11
+      script: mvn test -Dtest=com.napier.sem.AppTest
+    - stage: integration tests
+      jdk: oraclejdk11
+      script: echo "Integration Tests"
+    - stage: deploy
+      install: skip
+      jdk: oraclejdk11
+      script: echo "Deploy"
+
+stages:
+  - unit tests
+  - integration tests
+  - name: deploy
+    if: branch = master

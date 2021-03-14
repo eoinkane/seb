@@ -151,6 +151,43 @@ public class App
         }
     }
 
+    /** getEmployeeBasic
+     *  Takes the same input as getEmployee but only returns the employee's emp_no and name
+     * @param ID, the ID of the employee to search the data base for
+     * @return Employee with the given ID
+     */
+    public Employee getEmployeeBasic(int ID)
+    {
+        try
+        {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "SELECT emp_no, first_name, last_name "
+                            + "FROM employees "
+                            + "WHERE emp_no = " + ID;
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Return new employee if valid.
+            // Check one is returned
+            if (rset.next()) {
+                Employee emp = new Employee();
+                emp.emp_no = rset.getInt("emp_no");
+                emp.first_name = rset.getString("first_name");
+                emp.last_name = rset.getString("last_name");
+                return emp;
+            } else
+                return null;
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get employee details");
+            return null;
+        }
+    }
+
     /**
      * Gets all the current employees and salaries.
      * @return A list of all employees and salaries, or null if there is an error.
@@ -404,5 +441,28 @@ public class App
             return null;
         }
     }
+
+    /**
+     * Inserts a new employee into the database
+     * @param emp an instance of an employee to insert into the database
+     */
+    public void addEmployee(Employee emp)
+    {
+        try
+        {
+            Statement stmt = con.createStatement();
+            String strUpdate =
+                    "INSERT INTO employees (emp_no, first_name, last_name, birth_date, gender, hire_date) " +
+                            "VALUES (" + emp.emp_no + ", '" + emp.first_name + "', '" + emp.last_name + "', " +
+                            "'9999-01-01', 'M', '9999-01-01')";
+            stmt.execute(strUpdate);
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to add employee");
+        }
+    }
+
 }
 

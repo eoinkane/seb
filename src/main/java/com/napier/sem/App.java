@@ -193,13 +193,13 @@ public class App
             // Create string for SQL statement
             String strSelect =
                     "SELECT employees.emp_no, employees.first_name, employees.last_name, salaries.salary "
-                             + "FROM employees, salaries, titles "
-                             + "WHERE employees.emp_no = salaries.emp_no "
-                             + "AND employees.emp_no = titles.emp_no "
-                             + "AND salaries.to_date = '9999-01-01' "
-                             + "AND titles.to_date = '9999-01-01' "
-                             + "AND titles.title = '<title>' "
-                             + "ORDER BY employees.emp_no ASC;";
+                            + "FROM employees, salaries, titles "
+                            + "WHERE employees.emp_no = salaries.emp_no "
+                            + "AND employees.emp_no = titles.emp_no "
+                            + "AND salaries.to_date = '9999-01-01' "
+                            + "AND titles.to_date = '9999-01-01' "
+                            + "AND titles.title = '<title>' "
+                            + "ORDER BY employees.emp_no ASC;";
             strSelect = strSelect.replace("<title>", role);
             // Execute SQL statement
             ResultSet rset = stmt.executeQuery(strSelect);
@@ -236,8 +236,9 @@ public class App
                             + emp.last_name + "\n"
                             + emp.title + "\n"
                             + "Salary: " + emp.salary + "\n"
-                            + "Department: " + emp.dept.dept_name + "\n"
-                            + "Manager: " + emp.manager.first_name + " " + emp.manager.last_name + "\n");
+                            + "Department: " + (emp.dept != null ? emp.dept.dept_name : null) + "\n"
+                            + "Manager: "
+                            + (emp.manager != null ? emp.manager.first_name + " " + emp.manager.last_name : null) + "\n");
         }
     }
 
@@ -308,13 +309,13 @@ public class App
             // Create string for SQL statement
             String strSelect =
                     "SELECT employees.emp_no, employees.first_name, employees.last_name, salaries.salary "
-                    + "FROM employees, salaries, dept_emp, departments "
-                    + "WHERE employees.emp_no = salaries.emp_no "
-                    + "AND employees.emp_no = dept_emp.emp_no "
-                    + "AND dept_emp.dept_no = departments.dept_no "
-                    + "AND salaries.to_date = '9999-01-01' "
-                    + "AND departments.dept_no = '" + dept.dept_no + "' "
-                    + "ORDER BY employees.emp_no ASC ";
+                            + "FROM employees, salaries, dept_emp, departments "
+                            + "WHERE employees.emp_no = salaries.emp_no "
+                            + "AND employees.emp_no = dept_emp.emp_no "
+                            + "AND dept_emp.dept_no = departments.dept_no "
+                            + "AND salaries.to_date = '9999-01-01' "
+                            + "AND departments.dept_no = '" + dept.dept_no + "' "
+                            + "ORDER BY employees.emp_no ASC ";
             // Execute SQL statement
             ResultSet rset = stmt.executeQuery(strSelect);
 

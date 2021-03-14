@@ -58,4 +58,11 @@ public class AppTest
     {
         app.displayEmployee(null);
     }
+
+    @Test
+    void displayEmployeeTestEmpty()
+    {
+        Employee emp = new Employee();
+        app.displayEmployee(emp);
+    }
 }

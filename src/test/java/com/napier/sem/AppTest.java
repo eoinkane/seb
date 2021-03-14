@@ -52,4 +52,10 @@ public class AppTest
         employees.add(emp);
         app.printSalaries(employees);
     }
+
+    @Test
+    void displayEmployeeTestNull()
+    {
+        app.displayEmployee(null);
+    }
 }

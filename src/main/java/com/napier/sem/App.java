@@ -11,13 +11,21 @@ public class App
         App a = new App();
 
         // Connect to database
-        a.connect();
+        if (args.length < 1)
+        {
+            a.connect("localhost:3306");
+        }
+        else
+        {
+            a.connect(args[0]);
+        }
 
-        // Extract employee salary information
-        Employee emp = a.getEmployee("Tse", "Herber");
+        Department dept = a.getDepartment("Sales");
+        ArrayList<Employee> employees = a.getSalariesByDepartment(dept);
 
-        // Test the size of the returned data - should be 42000
-        a.displayEmployee(emp);
+        // Print salary report
+        // a.printSalaries(employees);
+        System.out.println(employees.size()); // CI/CD implementation. Should be 42000
 
         // Disconnect from database
         a.disconnect();
@@ -30,13 +38,14 @@ public class App
 
     /**
      * Connect to the MySQL database.
+     * @param location database location value
      */
-    public void connect()
+    public void connect(String location)
     {
         try
         {
             // Load Database driver
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
         }
         catch (ClassNotFoundException e)
         {
@@ -53,7 +62,7 @@ public class App
                 // Wait a bit for db to start
                 Thread.sleep(30000);
                 // Connect to database
-                con = DriverManager.getConnection("jdbc:mysql://db:3306/employees?useSSL=false", "root", "example");
+                con = DriverManager.getConnection("jdbc:mysql://" + location +"/employees?allowPublicKeyRetrieval=true&useSSL=false", "root", "example");
                 System.out.println("Successfully connected");
                 break;
             }
@@ -130,6 +139,43 @@ public class App
                 emp.salary = rset.getInt("salary");
                 emp.dept = dept;
                 emp.manager = mngr;
+                return emp;
+            } else
+                return null;
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get employee details");
+            return null;
+        }
+    }
+
+    /** getEmployeeBasic
+     *  Takes the same input as getEmployee but only returns the employee's emp_no and name
+     * @param ID, the ID of the employee to search the data base for
+     * @return Employee with the given ID
+     */
+    public Employee getEmployeeBasic(int ID)
+    {
+        try
+        {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "SELECT emp_no, first_name, last_name "
+                            + "FROM employees "
+                            + "WHERE emp_no = " + ID;
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Return new employee if valid.
+            // Check one is returned
+            if (rset.next()) {
+                Employee emp = new Employee();
+                emp.emp_no = rset.getInt("emp_no");
+                emp.first_name = rset.getString("first_name");
+                emp.last_name = rset.getString("last_name");
                 return emp;
             } else
                 return null;
@@ -395,5 +441,28 @@ public class App
             return null;
         }
     }
+
+    /**
+     * Inserts a new employee into the database
+     * @param emp an instance of an employee to insert into the database
+     */
+    public void addEmployee(Employee emp)
+    {
+        try
+        {
+            Statement stmt = con.createStatement();
+            String strUpdate =
+                    "INSERT INTO employees (emp_no, first_name, last_name, birth_date, gender, hire_date) " +
+                            "VALUES (" + emp.emp_no + ", '" + emp.first_name + "', '" + emp.last_name + "', " +
+                            "'9999-01-01', 'M', '9999-01-01')";
+            stmt.execute(strUpdate);
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to add employee");
+        }
+    }
+
 }
 

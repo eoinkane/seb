@@ -1,9 +1,21 @@
+language: java
+
 sudo: required
 
-language: java
+addons:
+  hosts:
+    - db
 
 services:
   - docker
 
-after_success:
-  - docker-compose up --abort-on-container-exit
+install:
+  - docker build -t database db/.
+  - docker run --rm -d e-e MYSQL_ROOT_PASSWORD=example -p 33060:3306 database
+  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+
+before_script:
+  - mvn clean
+
+script:
+  - mvn test -D test=com.napier.sem.AppTest

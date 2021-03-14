@@ -65,4 +65,30 @@ public class AppTest
         Employee emp = new Employee();
         app.displayEmployee(emp);
     }
+
+    @Test
+    void displayEmployeeTest()
+    {
+        Department dept = new Department();
+        Employee mngr = new Employee();
+        mngr.emp_no = 1000;
+        mngr.first_name = "John";
+        mngr.last_name = "Smith";
+        mngr.title = "Manager";
+
+        dept.dept_no = "d001";
+        dept.dept_name = "sales";
+        dept.manager = mngr;
+
+        Employee emp = new Employee();
+        emp.emp_no = 1;
+        emp.first_name = "Kevin";
+        emp.last_name = "Chalmers";
+        emp.title = "Engineer";
+        emp.salary = 55000;
+        emp.manager = mngr;
+        emp.dept = dept;
+
+        app.displayEmployee(emp);
+    }
 }

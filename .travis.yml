@@ -77,7 +77,7 @@ stages:
 - name: deploy
   if: branch = master
 - name: Google Cloud Deploy
-  if: branch = $CLOUD_DEPLOY_BRANCH
+  if: branch = feature/cloud-application
 after_success:
 - bash <(curl -s https://codecov.io/bash)
 before_install:
